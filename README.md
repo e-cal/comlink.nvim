@@ -87,6 +87,7 @@ Built-in placeholders:
 - `@this`: current selection, or the current cursor location if nothing is selected
 - `@buffer`: current buffer path
 - `@selection`: selected text as a fenced code block, or the current line if nothing is selected
+- `@line`: current cursor line as a fenced code block with location header
 - `@buffers`: all listed file buffers
 - `@visible`: visible window ranges
 - `@diagnostics`: diagnostics for the current buffer
@@ -130,6 +131,7 @@ Custom context functions receive a `ctx` object with these methods:
 - `ctx:this()`: formatted reference to the current selection or cursor location
 - `ctx:buffer()`: formatted reference to the current buffer
 - `ctx:selection()`: selected text as a fenced code block with location header
+- `ctx:line()`: current cursor line as a fenced code block with location header
 - `ctx:buffers()`: comma-separated list of open file buffers
 - `ctx:visible_text()`: comma-separated list of visible ranges across windows
 - `ctx:diagnostics()`: formatted diagnostics for the current buffer

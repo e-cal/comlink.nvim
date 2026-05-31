@@ -102,6 +102,9 @@ M.defaults = {
 		["@selection"] = function(context)
 			return context:selection()
 		end,
+		["@line"] = function(context)
+			return context:line()
+		end,
 		["@buffers"] = function(context)
 			return context:buffers()
 		end,

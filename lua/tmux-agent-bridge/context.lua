@@ -303,6 +303,17 @@ function Context:selection()
 	return ref .. "\n```" .. ft .. "\n" .. content .. "\n```"
 end
 
+function Context:line()
+	local ref = Context.format(self.buf, {
+		start_line = self.cursor[1],
+		start_col = self.cursor[2] + 1,
+	})
+	local ft = vim.bo[self.buf].filetype
+	local content = vim.api.nvim_buf_get_lines(self.buf, self.cursor[1] - 1, self.cursor[1], false)[1] or ""
+
+	return ref .. "\n```" .. ft .. "\n" .. content .. "\n```"
+end
+
 function Context:buffers()
 	local file_list = {}
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -355,8 +366,18 @@ end
 
 function Context:diagnostics()
 	local diagnostics = vim.diagnostic.get(self.buf)
+	if self.range then
+		local start_lnum = self.range.from[1] - 1
+		local end_lnum = self.range.to[1] - 1
+		diagnostics = vim.tbl_filter(function(diagnostic)
+			local diagnostic_start = diagnostic.lnum
+			local diagnostic_end = diagnostic.end_lnum or diagnostic.lnum
+			return diagnostic_start <= end_lnum and diagnostic_end >= start_lnum
+		end, diagnostics)
+	end
+
 	if #diagnostics == 0 then
-		return nil
+		return ""
 	end
 
 	local items = vim.tbl_map(function(diagnostic)
